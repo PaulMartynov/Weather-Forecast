@@ -1,0 +1,19 @@
+{
+  "name": "otus-homework-5",
+  "version": "1.0.0",
+  "description": "Weather web-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulMartynov/otus-homework-5.git"
+  },
+  "author": "Pavel Martynov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulMartynov/otus-homework-5/issues"
+  },
+  "homepage": "https://github.com/PaulMartynov/otus-homework-5#readme"
+}
