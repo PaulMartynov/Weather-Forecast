@@ -1,14 +1,10 @@
-import { weatherForm, showWeather, API_KEY } from "./showWeater.js";
+import { showWeather, getWeather } from "./showWeater.js";
 
 // eslint-disable-next-line func-names
 (async function () {
-  async function getWeather(cityName) {
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}`
-    );
-    const weatherJson = await response.json();
-    return weatherJson;
-  }
+  // Получаем указатели на нужные элементы
+  const weatherForm = document.querySelector("form");
+  const weatherInfoEl = document.querySelector("#weatherInfo");
 
   weatherForm.addEventListener("submit", async (ev) => {
     // чтобы не перезагружать страницу
@@ -21,6 +17,6 @@ import { weatherForm, showWeather, API_KEY } from "./showWeater.js";
     inputEl.value = "";
 
     const weather = await getWeather(cityName);
-    showWeather(weather);
+    showWeather(weatherInfoEl, weather);
   });
 })();
