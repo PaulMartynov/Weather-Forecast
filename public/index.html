@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Weather web-app</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <link  rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
     <form>
@@ -10,11 +14,14 @@
       ><input
         id="userInput"
         placeholder="Type city and press enter"
+        list="towns"
         required
         autofocus
       />
+      <datalist id="towns"></datalist>
       <button>Get weather</button>
     </form>
     <pre id="weatherInfo"></pre>
+    <div id="map"></div>
   </body>
 </html>

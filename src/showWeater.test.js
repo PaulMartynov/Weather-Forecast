@@ -4,6 +4,9 @@ import {
   loadListOfTowns,
   drawList,
   showWeather,
+  addTownInList,
+  getWeatherByCoordinats,
+  showWeatherLocation,
 } from "./showWeater.js";
 
 describe("testing getWeather function", () => {
@@ -33,5 +36,23 @@ describe("testing drawList function", () => {
 describe("testing showWeather function", () => {
   test("is a function", () => {
     expect(showWeather).toBeInstanceOf(Function);
+  });
+});
+
+describe("testing addTownInList function", () => {
+  test("is a function", () => {
+    expect(addTownInList).toBeInstanceOf(Function);
+  });
+});
+
+describe("testing getWeatherByCoordinats function", () => {
+  test("is a function", () => {
+    expect(getWeatherByCoordinats).toBeInstanceOf(Function);
+  });
+});
+
+describe("testing showWeatherLocation function", () => {
+  test("is a function", () => {
+    expect(showWeatherLocation).toBeInstanceOf(Function);
   });
 });
