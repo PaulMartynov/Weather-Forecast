@@ -7,6 +7,7 @@ import {
   saveListOfTowns,
   showWeatherLocation,
 } from "./showWeater.js";
+import { updateMap } from "./showLocation.js";
 
 // eslint-disable-next-line func-names
 (async function () {
@@ -33,7 +34,10 @@ import {
     // Показ погоды
     const weather = await getWeather(cityName);
     showWeather(weatherInfoEl, weather);
-
+    if (weather.cod === 200) {
+      const { lon, lat } = weather.coord;
+      updateMap(lat, lon);
+    }
     // Сохранение города в список
     addTownInList(listOfTowns, cityName);
     await saveListOfTowns(listOfTowns);

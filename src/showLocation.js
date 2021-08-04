@@ -1,22 +1,25 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import L from "leaflet";
+/* global ymaps */
+let map;
 
-export function showMap(lat, lon) {
-  const map = L.map("map").setView([lat, lon], 15);
-  L.tileLayer(
-    "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-    {
-      attribution:
-        'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-      maxZoom: 18,
-      id: "mapbox/streets-v11",
-      tileSize: 512,
-      zoomOffset: -1,
-      accessToken:
-        "pk.eyJ1IjoicC1tYXJ0eW5vdiIsImEiOiJja3J2eDhzMnowYjVqMndzNzkxeDh2ZW5rIn0.cNlcrdx4cSXWq90AL6yuXg",
-    }
-  ).addTo(map);
+export function showMap(lon, lat) {
+  function init() {
+    // Создание карты.
+    map = new ymaps.Map("map", {
+      // Координаты центра карты.
+      // Порядок по умолчанию: «широта, долгота».
+      // Чтобы не определять координаты центра карты вручную,
+      // воспользуйтесь инструментом Определение координат.
+      center: [lon, lat],
+      // Уровень масштабирования. Допустимые значения:
+      // от 0 (весь мир) до 19.
+      zoom: 12,
+    });
+  }
+  ymaps.ready(init);
+}
 
-  // добавляем маркер с сообщением
-  L.marker([lat, lon]).addTo(map).bindPopup("Your location").openPopup();
+export function updateMap(lon, lat) {
+  if (map !== undefined) {
+    map.setCenter([lon, lat], 12);
+  }
 }

@@ -3,13 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Weather web-app</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""
-    />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script
+      src="https://api-maps.yandex.ru/2.1/?apikey=8feb5289-f43e-46fb-9b3b-5633a4fc1f86&lang=en_US"
+      type="text/javascript"
+    ></script>
   </head>
   <body>
     <form>
@@ -25,6 +22,6 @@
       <button>Get weather</button>
     </form>
     <pre id="weatherInfo"></pre>
-    <div id="map"></div>
+    <div id="map" style="width: 600px; height: 400px"></div>
   </body>
 </html>
