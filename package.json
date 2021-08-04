@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "test": "jest --coverage",
-    "lint": "prettier --check . && eslint .",
-    "lint:fix": "prettier --write . && eslint . --fix",
+    "lint": "prettier --check src/**/*.js && eslint src/**/*.js",
+    "lint:fix": "prettier --write src/**/*.js && eslint --fix src/**/*.js",
     "prepare": "husky install",
     "build": "webpack --mode=production",
     "start": "webpack serve --mode=development",
