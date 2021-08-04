@@ -6,8 +6,8 @@ import {
   addTownInList,
   saveListOfTowns,
   showWeatherLocation,
+  updateMap,
 } from "./showWeater.js";
-import { updateMap } from "./showLocation.js";
 
 // eslint-disable-next-line func-names
 (async function () {
