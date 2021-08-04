@@ -47,8 +47,8 @@
     "webpack-dev-server": "^3.11.2"
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{css,js,md,yml,html}": "prettier --write"
+    "src/**/*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
   },
   "husky": {
     "hooks": {
