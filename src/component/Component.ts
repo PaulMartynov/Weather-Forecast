@@ -1,5 +1,5 @@
 export abstract class Component<State = any> {
-  private el: HTMLDivElement;
+  private el: Element;
 
   protected state: State = {} as State;
 
@@ -8,7 +8,7 @@ export abstract class Component<State = any> {
     () => void
   >;
 
-  constructor(el: HTMLDivElement) {
+  constructor(el: Element) {
     this.el = el;
     setTimeout(() => {
       this.el.innerHTML = this.render();
