@@ -1,6 +1,11 @@
 import { Component } from "./Component";
 import { getWeather, getWeatherByCoordinats } from "../services/weatherService";
 import { updateMap } from "../services/mapService";
+import {
+  saveListOfTowns,
+  loadListOfTowns,
+  addTownInList,
+} from "../services/storage";
 
 export class WeatherInfo extends Component {
   state = {
@@ -10,9 +15,17 @@ export class WeatherInfo extends Component {
     weatherDescription: "",
   };
 
+  webEl: Element;
+
+  towns: string[] = [];
+
   constructor(el: Element) {
     super(el);
+    this.webEl = el;
     this.getWeatherByLocation();
+    loadListOfTowns().then((result) => {
+      this.towns = result;
+    });
   }
 
   showWeather(weather: any): void {
@@ -38,7 +51,7 @@ export class WeatherInfo extends Component {
     updateMap(lat, lon);
   }
 
-  async getWeatherByLocation(): Promise<void> {
+  getWeatherByLocation(): void {
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const { latitude, longitude } = coords;
@@ -54,15 +67,21 @@ export class WeatherInfo extends Component {
     );
   }
 
-  async submit(ev: Event): Promise<void> {
+  submit = (ev: Event) => {
     ev.preventDefault();
     const inputEl = (ev.target as Element).querySelector("input");
     if (inputEl) {
-      const weather = await getWeather(inputEl.value);
-      this.showWeather(weather);
+      const cityName = inputEl.value;
+      getWeather(cityName).then((weather) => {
+        this.showWeather(weather);
+        if (weather.cod === 200) {
+          addTownInList(this.towns, cityName);
+          saveListOfTowns(this.towns);
+        }
+      });
       inputEl.value = "";
     }
-  }
+  };
 
   // @ts-ignore
   events = {
@@ -84,7 +103,9 @@ export class WeatherInfo extends Component {
       autofocus
       autocomplete="off"
     />
-    <datalist id="towns"></datalist>
+    <datalist id="towns">
+      ${this.towns.map((el) => `<option value=${el} />`).join("")}
+    </datalist>
     <button>Get weather</button>
   </form>
   <table>
