@@ -13,7 +13,7 @@ export class WeatherInfo extends Component {
     temp: "",
     weatherIcon: "",
     weatherDescription: "",
-    towns: [],
+    towns: [] as string[],
   };
 
   constructor(el: Element) {
@@ -90,6 +90,9 @@ export class WeatherInfo extends Component {
     ev.preventDefault();
     const inputEl = ev.target as HTMLInputElement;
     const cityName = inputEl.value;
+    if (!this.state.towns.includes(cityName)) {
+      return;
+    }
     getWeather(cityName).then((weather) => {
       if (weather.cod === 200) {
         addTownInList(this.state.towns, cityName);
