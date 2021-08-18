@@ -1,28 +1,8 @@
 import {
-  drawList,
   getWeather,
   getWeatherByCoordinats,
   getWeatherService,
-  showWeather,
-  showWeatherLocation,
 } from "./weatherService";
-
-describe("testing drawList function", () => {
-  test("is a function", () => {
-    expect(drawList).toBeInstanceOf(Function);
-  });
-  test("option have been added to datalist", () => {
-    const webEl = document.createElement("datalist");
-    drawList(webEl, ["Atlanta"]);
-    expect(webEl.querySelector("option").value).toBe("Atlanta");
-  });
-});
-
-describe("testing showWeather function", () => {
-  test("is a function", () => {
-    expect(showWeather).toBeInstanceOf(Function);
-  });
-});
 
 describe("testing getWeatherByCoordinats function", () => {
   beforeEach(() => {
@@ -95,18 +75,5 @@ describe("testing getWeather function", () => {
     );
     await getWeather();
     expect(global.fetch).toBeCalled();
-  });
-});
-
-describe("testing showWeatherLocation function", () => {
-  test("is a function", () => {
-    expect(showWeatherLocation).toBeInstanceOf(Function);
-  });
-  test("expect navigator.geolocation.getCurrentPosition have been called", () => {
-    global.navigator.geolocation = {
-      getCurrentPosition: jest.fn(),
-    };
-    showWeatherLocation();
-    expect(global.navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
   });
 });
