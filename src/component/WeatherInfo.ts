@@ -3,8 +3,8 @@ import { getWeather, getWeatherByCoordinats } from "../services/weatherService";
 import { updateMap } from "../services/mapService";
 import {
   saveListOfTowns,
-  loadListOfTowns,
   addTownInList,
+  loadListOfTowns,
 } from "../services/storage";
 
 export class WeatherInfo extends Component {
@@ -13,19 +13,20 @@ export class WeatherInfo extends Component {
     temp: "",
     weatherIcon: "",
     weatherDescription: "",
+    towns: [],
   };
-
-  webEl: Element;
-
-  towns: string[] = [];
 
   constructor(el: Element) {
     super(el);
-    this.webEl = el;
     this.getWeatherByLocation();
-    loadListOfTowns().then((result) => {
-      this.towns = result;
-    });
+    setTimeout(() => {
+      const datalist = el.querySelector("datalist");
+      if (datalist) {
+        loadListOfTowns().then((list) => {
+          this.state.towns = list;
+        });
+      }
+    }, 1);
   }
 
   showWeather(weather: any): void {
@@ -35,6 +36,7 @@ export class WeatherInfo extends Component {
         temp: "",
         weatherIcon: "",
         weatherDescription: "",
+        towns: this.state.towns,
       });
       return;
     }
@@ -45,6 +47,7 @@ export class WeatherInfo extends Component {
       temp: `${Math.round(weather.main.temp - 273.15)}°C`,
       weatherIcon: icon,
       weatherDescription: description,
+      towns: this.state.towns,
     });
 
     const { lon, lat } = weather.coord;
@@ -73,19 +76,34 @@ export class WeatherInfo extends Component {
     if (inputEl) {
       const cityName = inputEl.value;
       getWeather(cityName).then((weather) => {
-        this.showWeather(weather);
         if (weather.cod === 200) {
-          addTownInList(this.towns, cityName);
-          saveListOfTowns(this.towns);
+          addTownInList(this.state.towns, cityName);
+          saveListOfTowns(this.state.towns);
         }
+        this.showWeather(weather);
       });
       inputEl.value = "";
     }
   };
 
+  selectCity = (ev: Event) => {
+    ev.preventDefault();
+    const inputEl = ev.target as HTMLInputElement;
+    const cityName = inputEl.value;
+    getWeather(cityName).then((weather) => {
+      if (weather.cod === 200) {
+        addTownInList(this.state.towns, cityName);
+        saveListOfTowns(this.state.towns);
+      }
+      this.showWeather(weather);
+    });
+    inputEl.value = "";
+  };
+
   // @ts-ignore
   events = {
     "submit@form": this.submit,
+    "change@input": this.selectCity,
   };
 
   render(): string {
@@ -104,18 +122,18 @@ export class WeatherInfo extends Component {
       autocomplete="off"
     />
     <datalist id="towns">
-      ${this.towns.map((el) => `<option value=${el} />`).join("")}
+      ${this.state.towns.map((el) => `<option value=${el} />`).join("")}
     </datalist>
     <button>Get weather</button>
   </form>
   <table>
-      <tr>
-        <td colspan="2"><h1>${this.state.cityName}</h1></td>
-      </tr>
-      <tr>
-        <td><h2>${this.state.temp}</h2></td>
-        <td>${weatherImg}</td>
-      </tr>
-    </table>`;
+    <tr>
+      <td colspan="2"><h1>${this.state.cityName}</h1></td>
+    </tr>
+    <tr>
+      <td><h2>${this.state.temp}</h2></td>
+      <td>${weatherImg}</td>
+    </tr>
+  </table>`;
   }
 }
