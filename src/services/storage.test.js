@@ -65,5 +65,6 @@ describe("testing addTownInList function", () => {
     expect(list).toHaveLength(10);
     expect(list[0]).toBe("newTown");
     expect(list[9]).toBe("9");
+    expect(list).toHaveLength(10);
   });
 });

@@ -1,6 +1,6 @@
-| Statements                                                              | Branches                                                                    | Functions                                                                | Lines                                                         |
-| ----------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------- |
-| ![Statements](https://img.shields.io/badge/statements-79.01%25-red.svg) | ![Branches](https://img.shields.io/badge/branches-91.67%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/functions-82.61%25-yellow.svg) | ![Lines](https://img.shields.io/badge/lines-79.01%25-red.svg) |
+| Statements                                                                      | Branches                                                                    | Functions                                                                | Lines                                                                 |
+| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| ![Statements](https://img.shields.io/badge/statements-91.57%25-brightgreen.svg) | ![Branches](https://img.shields.io/badge/branches-93.33%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/functions-83.33%25-yellow.svg) | ![Lines](https://img.shields.io/badge/lines-91.57%25-brightgreen.svg) |
 
 # Weather app
 
