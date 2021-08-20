@@ -23,9 +23,7 @@ describe("testing showWeather function", () => {
       message: "testMessage",
     });
     expect(weatherInfo.state.cityName).toBe("testMessage");
-    expect(weatherInfo.state.weatherIcon).toBe("");
     expect(weatherInfo.state.temp).toBe("");
-    expect(weatherInfo.state.weatherDescription).toBe("");
     expect(mapService.updateMap).not.toHaveBeenCalled();
   });
   test("showWeather have been called with success message", () => {
@@ -48,9 +46,7 @@ describe("testing showWeather function", () => {
       },
     });
     expect(weatherInfo.state.cityName).toBe("testName");
-    expect(weatherInfo.state.weatherIcon).toBe("testIcon");
     expect(weatherInfo.state.temp).toBe("0°C");
-    expect(weatherInfo.state.weatherDescription).toBe("testDescription");
     expect(mapService.updateMap).toBeCalledWith(0, 0);
   });
 });
