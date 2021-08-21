@@ -42,4 +42,13 @@ describe("template", () => {
       expect(template("{{for items}}{{A}},{{endfor}}", data)).toBe("1,11,111,");
     });
   });
+
+  test("puts values from array elements inside loop", () => {
+    expect(
+      template("{{for items as item}}{{item}},{{endfor}}", {
+        NAME: "0 ",
+        items: [1, 2, 3],
+      })
+    ).toBe("1,2,3,");
+  });
 });
