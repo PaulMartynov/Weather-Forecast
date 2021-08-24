@@ -20,7 +20,7 @@ describe("testing getWeatherByCoordinats function", () => {
         json: () => Promise.resolve({}),
       })
     );
-    await getWeatherByCoordinats();
+    await getWeatherByCoordinats(0, 0);
     expect(global.fetch).toBeCalled();
   });
 });
