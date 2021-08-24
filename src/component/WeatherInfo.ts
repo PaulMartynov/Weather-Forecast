@@ -18,7 +18,7 @@ export class WeatherInfo extends Component {
 
   private webEl: Element | undefined;
 
-  private isMounted = false;
+  private mounted = false;
 
   constructor(el: Element) {
     super(el);
@@ -35,28 +35,32 @@ export class WeatherInfo extends Component {
   }
 
   showWeather(weather: any): void {
-    if (weather.cod !== 200) {
+    try {
+      if (weather.cod !== 200) {
+        this.setState({
+          cityName: weather.message,
+          temp: "",
+          weatherImg: "",
+          towns: this.state.towns,
+        });
+        return;
+      }
+
       this.setState({
-        cityName: weather.message,
-        temp: "",
-        weatherImg: "",
+        cityName: weather.name,
+        temp: `${Math.round(weather.main.temp - 273.15)}°C`,
+        weatherImg: template(
+          `<img src="http://openweathermap.org/img/wn/{{icon}}@2x.png" alt={{description}}>`,
+          weather.weather[0]
+        ),
         towns: this.state.towns,
       });
-      return;
+
+      const { lon, lat } = weather.coord;
+      updateMap(lat, lon);
+    } catch (error) {
+      console.log(error);
     }
-
-    this.setState({
-      cityName: weather.name,
-      temp: `${Math.round(weather.main.temp - 273.15)}°C`,
-      weatherImg: template(
-        `<img src="http://openweathermap.org/img/wn/{{icon}}@2x.png" alt={{description}}>`,
-        weather.weather[0]
-      ),
-      towns: this.state.towns,
-    });
-
-    const { lon, lat } = weather.coord;
-    updateMap(lat, lon);
   }
 
   getWeatherByLocation(): void {
@@ -115,8 +119,8 @@ export class WeatherInfo extends Component {
 
   onMount(el: Element): void {
     this.webEl = el;
-    if (!this.isMounted) {
-      this.isMounted = true;
+    if (!this.mounted) {
+      this.mounted = true;
     }
   }
 

@@ -198,3 +198,21 @@ describe("testing WeatherInfo class", () => {
     }, 10);
   });
 });
+
+describe("testing onMount function", () => {
+  test("is a function", () => {
+    expect(WeatherInfo.prototype.onMount).toBeInstanceOf(Function);
+  });
+  test("called onMount in constructor", () => {
+    const webEl = document.createElement("div");
+    webEl.setAttribute("id", "weatherInfo");
+    jest
+      .spyOn(WeatherInfo.prototype, "render")
+      .mockImplementation(() => `<datalist></datalist>`);
+    jest.spyOn(WeatherInfo.prototype, "onMount");
+    const weatherInfo = new WeatherInfo(webEl);
+    setTimeout(() => {
+      expect(weatherInfo.onMount).toBeCalled();
+    }, 10);
+  });
+});
