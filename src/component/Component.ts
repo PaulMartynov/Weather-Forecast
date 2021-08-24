@@ -18,6 +18,8 @@ export abstract class Component<State = Record<string, unknown>> {
 
   abstract render(): string;
 
+  abstract onMount(element: Element): void;
+
   setState(patch: Partial<State>): void {
     this.state = { ...this.state, ...patch };
     this.el.innerHTML = this.render();

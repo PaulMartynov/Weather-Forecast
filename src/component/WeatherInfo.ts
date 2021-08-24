@@ -16,6 +16,10 @@ export class WeatherInfo extends Component {
     towns: [] as string[],
   };
 
+  private webEl: Element | undefined;
+
+  private isMounted = false;
+
   constructor(el: Element) {
     super(el);
     this.getWeatherByLocation();
@@ -24,6 +28,7 @@ export class WeatherInfo extends Component {
       if (datalist) {
         loadListOfTowns().then((list) => {
           this.state.towns = list;
+          this.onMount(el);
         });
       }
     }, 1);
@@ -107,6 +112,13 @@ export class WeatherInfo extends Component {
     "submit@form": this.submit,
     "change@input": this.selectCity,
   };
+
+  onMount(el: Element): void {
+    this.webEl = el;
+    if (!this.isMounted) {
+      this.isMounted = true;
+    }
+  }
 
   render(): string {
     return template(
