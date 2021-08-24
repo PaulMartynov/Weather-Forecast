@@ -53,7 +53,6 @@ describe("Component", () => {
         return `<h1>${this.state.text}</h1>`;
       }
     }
-    // eslint-disable-next-line no-new
     new TestComponent(el);
     await sleep(10);
 
@@ -131,8 +130,7 @@ describe("Component", () => {
     el.querySelector("button")?.click();
     expect(onButtonClick).toHaveBeenCalledTimes(1);
 
-    // @ts-ignore
-    el.querySelector("button.x")?.click();
+    el.querySelector<HTMLButtonElement>("button.x")?.click();
     expect(onButtonClick).toHaveBeenCalledTimes(2);
     expect(onButtonXClick).toHaveBeenCalledTimes(1);
   });

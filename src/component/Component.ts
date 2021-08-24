@@ -1,10 +1,10 @@
-export abstract class Component<State = any> {
+export abstract class Component<State = Record<string, unknown>> {
   private el: Element;
 
   protected state: State = {} as State;
 
-  protected events: Record<"string", () => void> = {} as Record<
-    "string",
+  protected events: Record<string, (ev: Event) => void> = {} as Record<
+    string,
     () => void
   >;
 
@@ -25,13 +25,11 @@ export abstract class Component<State = any> {
   }
 
   subscribeToEvents(): void {
-    // eslint-disable-next-line guard-for-in
-    for (const key in this.events) {
+    Object.keys(this.events).forEach((key) => {
       const [eventName, selector] = key.split("@");
       [...this.el.querySelectorAll(`${selector}`)].forEach((elem) => {
-        // @ts-ignore
         elem.addEventListener(`${eventName}`, this.events[key]);
       });
-    }
+    });
   }
 }

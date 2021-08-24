@@ -70,7 +70,7 @@ export class WeatherInfo extends Component {
     );
   }
 
-  submit = (ev: Event) => {
+  submit = (ev: Event): void => {
     ev.preventDefault();
     const inputEl = (ev.target as Element).querySelector("input");
     if (inputEl) {
@@ -86,7 +86,7 @@ export class WeatherInfo extends Component {
     }
   };
 
-  selectCity = (ev: Event) => {
+  selectCity = (ev: Event): void => {
     ev.preventDefault();
     const inputEl = ev.target as HTMLInputElement;
     const cityName = inputEl.value;
@@ -103,7 +103,6 @@ export class WeatherInfo extends Component {
     inputEl.value = "";
   };
 
-  // @ts-ignore
   events = {
     "submit@form": this.submit,
     "change@input": this.selectCity,
