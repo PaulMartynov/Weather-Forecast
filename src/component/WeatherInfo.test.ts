@@ -4,20 +4,20 @@ import * as storage from "../services/storage";
 import * as mapService from "../services/mapService";
 import * as WeatherService from "../services/weatherService";
 
-// @ts-ignore
-global.navigator.geolocation = {
-  getCurrentPosition: jest.fn(),
-  watchPosition: jest.fn(),
-};
-// @ts-ignore
-mapService.updateMap = jest.fn();
+Object.defineProperty(navigator, "geolocation", {
+  value: {
+    getCurrentPosition: jest.fn(),
+    watchPosition: jest.fn(),
+  },
+});
+jest.spyOn(mapService, "updateMap").mockImplementation();
 
 describe("testing showWeather function", () => {
+  const weatherInfo = new WeatherInfo(document.createElement("div"));
   test("is a function", () => {
     expect(WeatherInfo.prototype.showWeather).toBeInstanceOf(Function);
   });
   test("showWeather have been called with error message", () => {
-    const weatherInfo = new WeatherInfo(document.createElement("div"));
     weatherInfo.showWeather({
       cod: 404,
       message: "testMessage",
@@ -27,12 +27,12 @@ describe("testing showWeather function", () => {
     expect(mapService.updateMap).not.toHaveBeenCalled();
   });
   test("showWeather have been called with success message", () => {
-    const weatherInfo = new WeatherInfo(document.createElement("div"));
+    const randomInt = Math.floor(Math.random() * 101);
     weatherInfo.showWeather({
       cod: 200,
-      name: "testName",
+      name: `testName${randomInt}`,
       main: {
-        temp: 273.15,
+        temp: 273.15 + randomInt,
       },
       weather: [
         {
@@ -41,13 +41,13 @@ describe("testing showWeather function", () => {
         },
       ],
       coord: {
-        lon: 0,
-        lat: 0,
+        lon: randomInt,
+        lat: randomInt,
       },
     });
-    expect(weatherInfo.state.cityName).toBe("testName");
-    expect(weatherInfo.state.temp).toBe("0°C");
-    expect(mapService.updateMap).toBeCalledWith(0, 0);
+    expect(weatherInfo.state.cityName).toBe(`testName${randomInt}`);
+    expect(weatherInfo.state.temp).toBe(`${randomInt}°C`);
+    expect(mapService.updateMap).toBeCalledWith(randomInt, randomInt);
   });
 });
 
@@ -69,22 +69,34 @@ describe("testing submit function", () => {
     ).toBeInstanceOf(Function);
   });
   test("dispatch submit", () => {
-    const resp = { cod: 200 };
+    const resp = {
+      cod: 200,
+      name: `testName`,
+      main: {
+        temp: 273.15,
+      },
+      weather: [
+        {
+          icon: "testIcon",
+          description: "testDescription",
+        },
+      ],
+      coord: {
+        lon: 0,
+        lat: 0,
+      },
+    };
     const webEl = document.createElement("div");
     webEl.innerHTML = `<form><input></form>`;
-    jest
-      .spyOn(WeatherService, "getWeather")
-      .mockImplementation((): Promise<any> => Promise.resolve(resp));
+    jest.spyOn(WeatherService, "getWeather").mockResolvedValue(resp);
     jest.spyOn(storage, "addTownInList");
     jest.spyOn(storage, "saveListOfTowns");
     jest.spyOn(WeatherInfo.prototype, "showWeather");
     const weahtherInfo = new WeatherInfo(webEl);
     const form = webEl.querySelector("form");
     expect(form).not.toBe(undefined);
-    // @ts-ignore
-    form.addEventListener("submit", weahtherInfo.submit);
-    // @ts-ignore
-    form.dispatchEvent(new Event("submit"));
+    form?.addEventListener("submit", weahtherInfo.submit);
+    form?.dispatchEvent(new Event("submit"));
     expect(WeatherService.getWeather).toBeCalled();
   });
 });
@@ -97,10 +109,25 @@ describe("testing selectCity function", () => {
   });
   test("dispatch selectCity", () => {
     const webEl = document.createElement("div");
+    const resp = {
+      cod: 200,
+      name: `testName`,
+      main: {
+        temp: 273.15,
+      },
+      weather: [
+        {
+          icon: "testIcon",
+          description: "testDescription",
+        },
+      ],
+      coord: {
+        lon: 0,
+        lat: 0,
+      },
+    };
     webEl.innerHTML = `<form><input></form>`;
-    jest
-      .spyOn(WeatherService, "getWeather")
-      .mockImplementation((): Promise<any> => Promise.resolve({ cod: 200 }));
+    jest.spyOn(WeatherService, "getWeather").mockResolvedValue(resp);
     jest.spyOn(storage, "addTownInList");
     jest.spyOn(storage, "saveListOfTowns");
     jest.spyOn(WeatherInfo.prototype, "showWeather");
@@ -142,15 +169,12 @@ describe("testing WeatherInfo class", () => {
     );
   });
   test("is calling global.navigator.geolocation", () => {
-    // eslint-disable-next-line no-new
-    new WeatherInfo(document.createElement("div"));
+    const weatherInfo = new WeatherInfo(document.createElement("div"));
+    expect(weatherInfo).not.toBe(null);
     expect(global.navigator.geolocation.getCurrentPosition).toHaveBeenCalled();
   });
   test("is calling loadListOfTowns", () => {
-    jest
-      .spyOn(storage, "loadListOfTowns")
-      // @ts-ignore
-      .mockImplementation(() => ["town"]);
+    jest.spyOn(storage, "loadListOfTowns").mockResolvedValue(["town"]);
     jest
       .spyOn(WeatherInfo.prototype, "render")
       .mockImplementation(() => `<datalist></datalist>`);
@@ -163,10 +187,7 @@ describe("testing WeatherInfo class", () => {
     }, 10);
   });
   test("is not calling loadListOfTowns", () => {
-    jest
-      .spyOn(storage, "loadListOfTowns")
-      // @ts-ignore
-      .mockImplementation(() => ["town"]);
+    jest.spyOn(storage, "loadListOfTowns").mockResolvedValue(["town"]);
     jest.spyOn(WeatherInfo.prototype, "render").mockImplementation(() => "");
     const weatherInfo = new WeatherInfo(document.createElement("div"));
     expect(weatherInfo.state.towns).toHaveLength(0);
@@ -174,6 +195,24 @@ describe("testing WeatherInfo class", () => {
       expect(storage.loadListOfTowns).toHaveBeenCalled();
       expect(weatherInfo.render).not.toHaveBeenCalled();
       expect(weatherInfo.state.towns).toHaveLength(0);
+    }, 10);
+  });
+});
+
+describe("testing onMount function", () => {
+  test("is a function", () => {
+    expect(WeatherInfo.prototype.onMount).toBeInstanceOf(Function);
+  });
+  test("called onMount in constructor", () => {
+    const webEl = document.createElement("div");
+    webEl.setAttribute("id", "weatherInfo");
+    jest
+      .spyOn(WeatherInfo.prototype, "render")
+      .mockImplementation(() => `<datalist></datalist>`);
+    jest.spyOn(WeatherInfo.prototype, "onMount");
+    const weatherInfo = new WeatherInfo(webEl);
+    setTimeout(() => {
+      expect(weatherInfo.onMount).toBeCalled();
     }, 10);
   });
 });

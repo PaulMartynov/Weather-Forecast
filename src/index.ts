@@ -5,7 +5,6 @@ import { WeatherInfo } from "./component/WeatherInfo";
   const weatherInfoEl = document.querySelector("#weatherInfo");
 
   if (weatherInfoEl) {
-    // eslint-disable-next-line no-new
     new WeatherInfo(weatherInfoEl);
   }
 })();

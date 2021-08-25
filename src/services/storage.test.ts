@@ -52,7 +52,7 @@ describe("testing addTownInList function", () => {
     expect(addTownInList).toBeInstanceOf(Function);
   });
   test("town added to list", () => {
-    const list = [];
+    const list: string[] = [];
     addTownInList(list, "newTown");
     expect(list).toHaveLength(1);
     expect(list[0]).toBe("newTown");

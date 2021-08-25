@@ -16,6 +16,10 @@ export class WeatherInfo extends Component {
     towns: [] as string[],
   };
 
+  private webEl: Element | undefined;
+
+  private mounted = false;
+
   constructor(el: Element) {
     super(el);
     this.getWeatherByLocation();
@@ -24,34 +28,39 @@ export class WeatherInfo extends Component {
       if (datalist) {
         loadListOfTowns().then((list) => {
           this.state.towns = list;
+          this.onMount(el);
         });
       }
     }, 1);
   }
 
   showWeather(weather: any): void {
-    if (weather.cod !== 200) {
+    try {
+      if (weather.cod !== 200) {
+        this.setState({
+          cityName: weather.message,
+          temp: "",
+          weatherImg: "",
+          towns: this.state.towns,
+        });
+        return;
+      }
+
       this.setState({
-        cityName: weather.message,
-        temp: "",
-        weatherImg: "",
+        cityName: weather.name,
+        temp: `${Math.round(weather.main.temp - 273.15)}°C`,
+        weatherImg: template(
+          `<img src="http://openweathermap.org/img/wn/{{icon}}@2x.png" alt={{description}}>`,
+          weather.weather[0]
+        ),
         towns: this.state.towns,
       });
-      return;
+
+      const { lon, lat } = weather.coord;
+      updateMap(lat, lon);
+    } catch (error) {
+      console.log(error);
     }
-
-    this.setState({
-      cityName: weather.name,
-      temp: `${Math.round(weather.main.temp - 273.15)}°C`,
-      weatherImg: template(
-        `<img src="http://openweathermap.org/img/wn/{{icon}}@2x.png" alt={{description}}>`,
-        weather.weather[0]
-      ),
-      towns: this.state.towns,
-    });
-
-    const { lon, lat } = weather.coord;
-    updateMap(lat, lon);
   }
 
   getWeatherByLocation(): void {
@@ -70,7 +79,7 @@ export class WeatherInfo extends Component {
     );
   }
 
-  submit = (ev: Event) => {
+  submit = (ev: Event): void => {
     ev.preventDefault();
     const inputEl = (ev.target as Element).querySelector("input");
     if (inputEl) {
@@ -86,7 +95,7 @@ export class WeatherInfo extends Component {
     }
   };
 
-  selectCity = (ev: Event) => {
+  selectCity = (ev: Event): void => {
     ev.preventDefault();
     const inputEl = ev.target as HTMLInputElement;
     const cityName = inputEl.value;
@@ -103,11 +112,17 @@ export class WeatherInfo extends Component {
     inputEl.value = "";
   };
 
-  // @ts-ignore
   events = {
     "submit@form": this.submit,
     "change@input": this.selectCity,
   };
+
+  onMount(el: Element): void {
+    this.webEl = el;
+    if (!this.mounted) {
+      this.mounted = true;
+    }
+  }
 
   render(): string {
     return template(

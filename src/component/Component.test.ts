@@ -13,12 +13,18 @@ describe("Component", () => {
     expect(Component).toBeInstanceOf(Function);
     const text = ``;
     class TestComponent extends Component {
+      webEl: Element | undefined;
+
       state = {
         text,
       };
 
       render() {
         return `${this.state.text}`;
+      }
+
+      onMount(element: Element): void {
+        this.webEl = element;
       }
     }
     expect(new TestComponent(el)).toBeInstanceOf(Component);
@@ -27,12 +33,18 @@ describe("Component", () => {
   test("renders component instance to element", async () => {
     const text = `${Math.random()}`;
     class TestComponent extends Component {
+      webEl: Element | undefined;
+
       state = {
         text,
       };
 
       render() {
         return `<h1>${this.state.text}</h1>`;
+      }
+
+      onMount(element: Element): void {
+        this.webEl = element;
       }
     }
     // eslint-disable-next-line no-new
@@ -45,6 +57,8 @@ describe("Component", () => {
   test("can render props from state", async () => {
     const text = `${Math.random()}`;
     class TestComponent extends Component {
+      webEl: Element | undefined;
+
       state = {
         text,
       };
@@ -52,8 +66,11 @@ describe("Component", () => {
       render() {
         return `<h1>${this.state.text}</h1>`;
       }
+
+      onMount(element: Element): void {
+        this.webEl = element;
+      }
     }
-    // eslint-disable-next-line no-new
     new TestComponent(el);
     await sleep(10);
 
@@ -64,6 +81,8 @@ describe("Component", () => {
     const text = `${Math.random()}`;
     const text2 = `${Math.random()}`;
     class TestComponent extends Component {
+      webEl: Element | undefined;
+
       state = {
         text,
         count: 1,
@@ -71,6 +90,10 @@ describe("Component", () => {
 
       render() {
         return `<h1>${this.state.text}|${this.state.count}</h1>`;
+      }
+
+      onMount(element: Element): void {
+        this.webEl = element;
       }
     }
     const component = new TestComponent(el);
@@ -88,6 +111,8 @@ describe("Component", () => {
     const onButtonXClick = jest.fn();
 
     class TestComponent extends Component {
+      webEl: Element | undefined;
+
       state = {
         text: 0,
       };
@@ -112,6 +137,10 @@ describe("Component", () => {
           <button class="x">2</button>
         `;
       }
+
+      onMount(element: Element): void {
+        this.webEl = element;
+      }
     }
     // eslint-disable-next-line no-new
     new TestComponent(el);
@@ -131,8 +160,7 @@ describe("Component", () => {
     el.querySelector("button")?.click();
     expect(onButtonClick).toHaveBeenCalledTimes(1);
 
-    // @ts-ignore
-    el.querySelector("button.x")?.click();
+    el.querySelector<HTMLButtonElement>("button.x")?.click();
     expect(onButtonClick).toHaveBeenCalledTimes(2);
     expect(onButtonXClick).toHaveBeenCalledTimes(1);
   });
