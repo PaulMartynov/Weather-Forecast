@@ -1,6 +1,6 @@
-| Statements                                                              | Branches                                                               | Functions                                                             | Lines                                                         |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------- |
-| ![Statements](https://img.shields.io/badge/statements-64.29%25-red.svg) | ![Branches](https://img.shields.io/badge/branches-87.18%25-yellow.svg) | ![Functions](https://img.shields.io/badge/functions-73.68%25-red.svg) | ![Lines](https://img.shields.io/badge/lines-64.29%25-red.svg) |
+| Statements                                                                | Branches                                                                   | Functions                                                             | Lines                                                           |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------- |
+| ![Statements](https://img.shields.io/badge/statements-89.8%25-yellow.svg) | ![Branches](https://img.shields.io/badge/branches-91.8%25-brightgreen.svg) | ![Functions](https://img.shields.io/badge/functions-79.17%25-red.svg) | ![Lines](https://img.shields.io/badge/lines-89.8%25-yellow.svg) |
 
 # Weather app
 
@@ -18,6 +18,6 @@
 - В поле можно ввести название города, нажать ввод или на кнопку и посмотреть погоду и карту в выбранном городе.
 - В списке выпадающего меню поля ввода хранятся 10 последних городов.
 
-#### Для отображения погоды использовался сервис [openweathermap](https://openweathermap.org/current)
+#### Для отображения погоды использовался сервис [Openweathermap](https://openweathermap.org/current)
 
 #### Для отображения карты использовался сервис [Яндекс.Карты](https://yandex.ru/dev/maps/)
